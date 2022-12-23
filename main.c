@@ -16,11 +16,76 @@ double calculate_variance(double *numbers, int length);
 
 double calculate_variance2(double *numbers, int length);
 
+void test_avg_variance();
+
+void test_avg_variance_no_ptr();
+
+void test_avg_variance_use_ptr();
+
 int main() {
+    test_avg_variance_use_ptr();
+}
+
+void test_avg_variance_use_ptr() {
+    double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+    // 计算数组长度（就是语言的语法规则，背下来就行了）：我们常用 sizeof(arr)/sizeof(arr[0])  来计算数组的长度。
+    //其中，
+    //sizeof(arr)：计算了整个数组arr占据了多少内存（字节为单位),
+    //sizeof(arr[0])： 计算了数组中第一个元素所占多少字节，两者相除就是数组的长度。
+    int n = sizeof(numbers) / sizeof(double);
+
+    // 1.计算平均数
+    // 使用指针 p 指向数组 numbers 首地址
+    double *p = numbers;
+    double sum = 0.0;
+    for (int i = 0; i < n; ++i) {
+        sum += *p;
+        p++; // 指针移动，指向下一个元素
+    }
+    double avg = sum / n;
+    printf("avg=%0.2f\n", avg);
+
+    // 2.计算方差
+    double *q = numbers; // 也可以直接复用 指针 p=numbers, 这里为了好理解，直接新声明了一个指针 q
+    double variance = 0.0;
+    for (int j = 0; j < n; j++) {
+        variance += (*q - avg) * (*q - avg);
+        q++; // 指针移动，指向下一个元素
+    }
+
+    variance = variance / n;
+    printf("variance=%0.2f", variance);
+}
+
+void test_avg_variance_no_ptr() {
+    double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
+    // 数组长度
+    int n = sizeof(numbers) / sizeof(double);
+
+    // 计算平均数
+    double sum = 0.0;
+    for (int i = 0; i < n; ++i) {
+        sum += numbers[i];
+    }
+    double avg = sum / n;
+    printf("avg=%0.2f\n", avg);
+
+    // 计算方差
+    double variance = 0.0;
+    for (int j = 0; j < n; j++) {
+        variance += (numbers[j] - avg) * (numbers[j] - avg);
+    }
+    variance = variance / n;
+    printf("variance=%0.2f", variance);
+}
+
+void test_avg_variance() {
     // 输入的数据，放到数组numbers里
     double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
     // 数组长度
     int n = sizeof(numbers) / sizeof(numbers[0]);
+
+    int m = sizeof(numbers) / sizeof(double);
 
     // 平均数
     double *p = numbers;
