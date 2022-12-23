@@ -6,11 +6,15 @@
  */
 double calculate_average(double *numbers, int length);
 
+double calculate_average2(double *numbers, int length);
+
 /*
  * 计算方差
  * 入参：numbers 指针数组
  */
 double calculate_variance(double *numbers, int length);
+
+double calculate_variance2(double *numbers, int length);
 
 int main() {
     double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
@@ -19,15 +23,18 @@ int main() {
 
     printf("输入数组：");
 
-    int length = sizeof numbers / sizeof numbers[0];
+    int size_of_numbers = sizeof numbers; // 40 bytes
+    int size_of_one_element = sizeof numbers[0]; // 8 bytes
+    int length = size_of_numbers / size_of_one_element; // 数组长度：5 = 40/8
+
     for (int i = 0; i < length; i++) {
         printf("%.1f ", numbers[i]);
     }
 
     // 调用 calculate_average 函数计算平均数
-    avg = calculate_average(numbers, length);
+    avg = calculate_average2(numbers, length);
     // 调用 calculate_variance 函数计算方差
-    variance = calculate_variance(numbers, length);
+    variance = calculate_variance2(numbers, length);
     printf("\n");
     printf("平均数：%.1f\n", avg);
     printf("方差：%.1f\n", variance);
@@ -51,6 +58,19 @@ double calculate_average(double *numbers, int length) {
 }
 
 /*
+ * 计算平均数
+ * 入参：numbers 指针数组 类型是double指针,指向double数组
+ */
+double calculate_average2(double *numbers, int length) {
+    double sum = 0.0;
+    for (int i = 0; i < length; i++) {
+        sum += *numbers;//求和
+        numbers++; // 指针移动指向数组的下一个元素
+    }
+    return sum / length;
+}
+
+/*
  * 计算方差
  * 入参：numbers 类型是double指针,指向double数组
  */
@@ -61,6 +81,22 @@ double calculate_variance(double *numbers, int length) {
 
     for (int j = 0; j < length; j++) {
         variance += (*(numbers + j) - avg) * (*(numbers + j) - avg); //求方差: *number 是取指针指向的数组元素的值
+    }
+    return variance / length;
+}
+
+/*
+ * 计算方差
+ * 入参：numbers 类型是double指针,指向double数组
+ */
+double calculate_variance2(double *numbers, int length) {
+    double variance = 0.0;
+    // 平均数
+    double avg = calculate_average(numbers, length);
+
+    for (int j = 0; j < length; j++) {
+        variance += (*numbers - avg) * (*numbers - avg); //求方差: *number 是取指针指向的数组元素的值
+        numbers++;// 指针移动指向数组的下一个元素
     }
     return variance / length;
 }
@@ -142,6 +178,5 @@ int p3() {
     if (*q != '\0') printf("\n%s", q); // 输出剩下的 word2字符串 DENTS
     return 0;
 }
-
 
 
