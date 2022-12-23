@@ -17,27 +17,51 @@ double calculate_variance(double *numbers, int length);
 double calculate_variance2(double *numbers, int length);
 
 int main() {
+    // 输入的数据，放到数组numbers里
     double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
-    double avg;
-    double variance;
+    // 数组长度
+    int n = sizeof(numbers) / sizeof(numbers[0]);
 
-    printf("输入数组：");
-
-    int size_of_numbers = sizeof numbers; // 40 bytes
-    int size_of_one_element = sizeof numbers[0]; // 8 bytes
-    int length = size_of_numbers / size_of_one_element; // 数组长度：5 = 40/8
-
-    for (int i = 0; i < length; i++) {
-        printf("%.1f ", numbers[i]);
+    // 平均数
+    double *p = numbers;
+    double sum = 0.0;
+    for (int i = 0; i < n; i++) {
+        sum += *p;
+        p++;
     }
+    double avg = sum / n;
+    printf("平均数：%.2f\n", avg);
 
-    // 调用 calculate_average 函数计算平均数
-    avg = calculate_average2(numbers, length);
-    // 调用 calculate_variance 函数计算方差
-    variance = calculate_variance2(numbers, length);
-    printf("\n");
-    printf("平均数：%.1f\n", avg);
-    printf("方差：%.1f\n", variance);
+    // 方差
+    double variance = 0;
+    // 指针复位
+    p = numbers;
+
+    for (int j = 0; j < n; j++) {
+        variance += (*p - avg) * (*p - avg); //求方差: *number 是取指针指向的数组元素的值
+        p++;
+    }
+    variance = variance / n;
+    printf("方差：%.2f", variance);
+
+//
+//    printf("输入数组：");
+//
+//    int size_of_numbers = sizeof numbers; // 40 bytes
+//    int size_of_one_element = sizeof numbers[0]; // 8 bytes
+//    int length = size_of_numbers / size_of_one_element; // 数组长度：5 = 40/8
+//
+//    for (int i = 0; i < length; i++) {
+//        printf("%.1f ", numbers[i]);
+//    }
+//
+//    // 调用 calculate_average 函数计算平均数
+//    avg = calculate_average2(numbers, length);
+//    // 调用 calculate_variance 函数计算方差
+//    variance = calculate_variance2(numbers, length);
+//    printf("\n");
+//    printf("平均数：%.1f\n", avg);
+//    printf("方差：%.1f\n", variance);
 
     // 输出：
     //    数组：1.00 2.00 3.00 4.00 5.00
