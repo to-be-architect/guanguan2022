@@ -2109,10 +2109,66 @@ int student_scores() {
     return 0;
 }
 
+// 字符串排序
+int sort_str_arr() {
+    const int LENGTH = 10;
+    int i, j;
+    char str[LENGTH][50], temp[50];
+
+    printf("输入10个单词:\n");
+/*
+C
+Java
+C++
+PHP
+Python
+Perl
+Ruby
+R
+JavaScript
+PHP
+*/
+
+    for (i = 0; i < LENGTH; ++i) {
+        scanf("%s[^\n]", str[i]);
+    }
+
+    for (i = 0; i < LENGTH - 1; ++i) {
+        for (j = i + 1; j < LENGTH; ++j) {
+            if (strcmp(str[i], str[j]) > 0) {
+                strcpy(temp, str[i]);
+                strcpy(str[i], str[j]);
+                strcpy(str[j], temp);
+            }
+        }
+    }
+
+    printf("\n排序后: \n");
+
+    for (i = 0; i < 10; ++i) {
+        puts(str[i]);
+    }
+/*
+C
+C++
+Java
+JavaScript
+PHP
+PHP
+Perl
+Python
+R
+Ruby
+ */
+
+    return 0;
+}
+
 // main 函数
 int main() {
-    student_scores();
+    sort_str_arr();
 
+// student_scores();
 //    test_upper_lower();
 //    gets_write_file();
 //    count_substr();
