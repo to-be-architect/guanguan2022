@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
 /*
  * 计算平均数
@@ -36,8 +39,14 @@ void test_fun_param_ptr() {
     fun(arr);
 }
 
-// main 函数
-int main() {
+
+void test_pp() {
+    int a = 7;
+    printf("%d\n", (a++) / 2); // 输出： 3
+    printf("%d\n", (a++) / 2); // 输出： 4
+}
+
+void test_avg_variance() {
     double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
     // 计算数组长度（就是语言的语法规则，背下来就行了）：我们常用 sizeof(arr)/sizeof(arr[0])  来计算数组的长度。
     //其中，
@@ -117,7 +126,7 @@ void test_avg_variance_no_ptr() {
     printf("variance=%0.2f", variance);
 }
 
-void test_avg_variance() {
+void test_avg_variance2() {
     // 输入的数据，放到数组numbers里
     double numbers[] = {1.0, 2.0, 3.0, 4.0, 5.0};
     // 数组长度
@@ -284,5 +293,142 @@ int p3() {
     if (*q != '\0') printf("\n%s", q); // 输出剩下的 word2字符串 DENTS
     return 0;
 }
+
+void test_rnd() {
+    // 随机数种子
+    srand(time(0));
+
+    int number[10] = {0};
+    for (int i = 0; i < 10; ++i) {
+        number[i] = 11 + rand() % 9989;
+    }
+    for (int i = 0; i < 10; ++i) {
+        printf("%d ", number[i]);
+    }
+}
+
+void test_arr_size() {
+    int arr[] = {1, 2, (3, 4), 5};
+    int length = sizeof(arr) / sizeof(int);
+    printf("%d\n", sizeof(arr));
+    printf("%d\n", sizeof(int));
+    for (int i = 0; i < length; ++i) {
+        printf("%d ", arr[i]);
+    }
+    // 16
+    //4
+    //1 2 4 5
+}
+
+
+void swap(int arr[], int i, int j) {
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+}
+
+// 冒泡排序
+void bubble_sort(int arr[], int length) {
+    int flag = 0;
+    for (int i = 0; i < length - 1; ++i) { // round
+        for (int j = 0; j < length - 1 - i; ++j) { // 每趟比较的次数，第i趟比较 length-i 次
+            if (arr[j] > arr[j + 1]) {
+                swap(arr, j, j + 1);
+                flag = 1; // 如果都没有交换，flag=0
+            }
+        }
+        if (flag == 0) { // 如果某一趟没有交换位置，则说明已经排好序，直接退出循环
+            break;
+        }
+    }
+}
+
+void test_bubble_sort() {
+    int arr[10] = {1, 3, 2, 6, 5, 4, 7, 9, 8, 10};
+    bubble_sort(arr, 10);
+    for (int i = 0; i < 10; ++i) {
+        printf("%d ", arr[i]);
+    }
+    // 1 2 3 4 5 6 7 8 9 10
+}
+
+// 计算pi: pi/4 = 1 - 1/3 + 1/5 - 1/7 + 1/9 - 1/11 + ...
+void calculate_pi() {
+    int sign;
+    double pi;
+    double n, t;
+    t = 1;
+    pi = 0;
+    n = 1;
+    sign = 1;
+    while (fabs(t) > 1e-8) {
+        pi += t;
+        n += 2;
+        sign = -sign;
+        t = sign / n;
+    }
+    pi *= 4;
+    printf("%f", pi);
+}
+
+// 斐波那契数列1
+void fib() {
+    long f1, f2;
+    f1 = 1;
+    f2 = 1;
+    for (int i = 0; i < 10; ++i) {
+        printf("%ld %ld ", f1, f2);
+        f1 = f1 + f2; // f3 = f1+f2 --> f1
+        f2 = f2 + f1; // f4 = f3+f2 --> f2
+    }
+    printf("\n");
+}
+
+
+// 斐波那契数列2:递归
+long fib_recur(int n) {
+    if (n <= 1) {
+        return 1;
+    }
+    return fib_recur(n - 1) + fib_recur(n - 2);
+}
+
+void test_fib_recur() {
+    for (int i = 0; i < 20; ++i) {
+        printf("%ld ", fib_recur(i));
+    }
+}
+
+// 素数判断
+int is_prime(int n) {
+    int k = sqrt(n);
+    int i;
+    for (i = 2; i <= k; i++) {
+        if (n % i == 0) {
+            break;
+        }
+    }
+
+    if (i > k) {
+        return 1; // yes, n is prime number
+    } else {
+        return 0; //  no
+    }
+}
+
+// 计算100-200之间的所有素数
+void test_prime_number() {
+    for (int i = 101; i <= 200; i += 2) { // 偶数不是素数，就直接判断奇数好了
+        if (is_prime(i) == 1) {
+            printf("%d ", i);
+        }
+    }
+}
+
+// main 函数
+int main() {
+    test_prime_number();
+}
+
 
 
