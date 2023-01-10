@@ -1204,51 +1204,6 @@ int yanghui_triangle() {
     return 0;
 }
 
-// 题目：输入数组，最大的与第一个元素交换，最小的与最后一个元素交换，输出数组。
-void max_min_arr(int *s, int n) {
-    int i;
-    int max = s[0];
-    int a = 0;
-    for (i = 0; i < n; i++) {
-        if (s[i] > max) {
-            max = s[i];
-            a = i;
-        }
-    }
-    s[a] = s[0];
-    s[0] = max;
-    int j;
-    int min = s[n - 1];
-    int b = n - 1;
-    for (j = 0; j < n; j++) {
-        if (s[j] < min) {
-            min = s[j];
-            b = j;
-        }
-    }
-    s[b] = s[n - 1];
-    s[n - 1] = min;
-}
-
-void printf_s(int *s, int n) {
-    int i;
-    for (i = 0; i < n; i++)
-        printf("%d ", s[i]);
-    printf("\n");
-}
-
-int test_max_min_array() {
-    int s[20];
-    int i, n;
-    printf("设置数组长度(<20):");
-    scanf("%d", &n);
-    printf("输入 %d 个元素:\n", n);
-    for (i = 0; i < n; i++)
-        scanf("%d", &s[i]);
-    max_min_arr(s, n);
-    printf_s(s, n);
-    return 0;
-}
 
 // 题目：有 n个整数，使其前面各数顺序向后移 m 个位置，最后m个数变成最前面的 m 个数。
 //滚动数组
@@ -2164,9 +2119,371 @@ Ruby
     return 0;
 }
 
+void pro1() {
+    int a[] = {1, 2, 3, 4, 5, 6};
+    int i = 0, j, s = 0;
+    while (i++ < 5) {
+        if (i % 2 == 0) continue;
+        for (j = i; j < 6; j += 2)
+            s += a[j];
+        printf("i=%d s=%d\n", i, s);
+    }
+}
+
+void pro2() {
+    int number = 56789;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 5; j++) {
+            int num = number % 10;
+            printf("%d", num);
+        }
+        number /= 10;
+        printf("\n");
+    }
+}
+
+#define square_sum(x, y) x*x+y*y
+
+void pro3() {
+    int x = 1, y = 2;
+    printf("%d\n", x * x + y * y);
+    printf("%d\n", square_sum(x, y));
+    printf("%d\n", square_sum(x + 1, y));
+    printf("%d\n", square_sum(x, y + 1));
+}
+
+void pro4() {
+    int x = 1, y = 3, z = 4;
+    switch (x < y) {
+        case 1:
+            while (1) {
+                if (z < y) break;
+                printf("%d ", (x++) + (--z));
+            }
+        case 2:
+            printf("%d %d %d\n", x, y, z);
+            break;
+        default:
+            printf("ok\n");
+    }
+}
+
+void shift(int a[], int n, int idx) {
+    static int s = 3;
+    a[idx] += a[s % n];
+    s++;
+}
+
+void pro5() {
+    int a[5] = {12, 3, 5, 16, 35}, i;
+    for (i = 0; i < 3; i++)
+        shift(&a[i], 5 - i, i);
+    for (i = 0; i < 5; i++)
+        printf("%d ", a[i]);
+}
+
+char *func(char *s1, char *s2);
+
+char *func(char *s1, char *s2) {
+    char *res, temp;
+    int i = 0;
+    res = (char *) malloc(strlen(s1) + strlen(s2) + 1);
+    while (*s1 != '\0' && *s2 != '\0') {
+        if (*s1 > *s2) {
+            res[i++] = *s2;
+            temp = *s1;
+            *s1 = *s1 - *s2 + '0';
+            *s2 = temp;
+        } else {
+            res[i++] = *s1;
+            *s1 = *s2 - *s1 + '0';
+        }
+        s1++;
+        s2++;
+    }
+    res[i] = '\0';
+    return res;
+}
+
+void pro6() {
+    char a[] = "Ujtxex", b[] = "Sjvukres", *s;
+    s = func(a, b);
+    printf("%s\n%s\n%s", s, a, b);
+    free(s);
+}
+
+/*
+ * 取任一个数，如 43005798，其中偶数个数是 4，奇数个数是 4，是 8 位
+数，可以组成一个新的数 448；该数（448）有 3 个偶数，0 个奇数，是 3 位数，又
+可以组成一个新的数 303；303 有 1 个偶数，2 个奇数，是 3 位数，便得到一个新的
+数 123。反复重复以上程序，始终是 123，得不到新的数了。对任何一个数重复以上
+过程都会得到 123，由此 123 被称为西西弗斯数。
+编写一个程序，输入一个自然数，输出西西弗斯数的转换过程。【只要实现不超过 10
+位的数】
+ */
+int sisyphus_number(int n) {
+    int odd = 0, even = 0, numn, orgin = n;
+
+    while (n != 0) {
+        //统计奇数偶数个数
+        if (n % 10 % 2 != 0) {
+            even++;
+        } else {
+            odd++;
+        }
+        n = n / 10;
+    }
+    numn = odd * 100 + even * 10 + (odd + even); //重写新数
+    if (numn != orgin) {
+        printf("->%d", numn);
+        sisyphus_number(numn);
+    }
+    return 0;
+}
+
+
+// 题目：输入数组，最大的与第一个元素交换，最小的与最后一个元素交换，输出数组。
+void max_min_arr(int *s, int n) {
+    int i;
+    int max = s[0];
+    int a = 0;
+    for (i = 0; i < n; i++) {
+        if (s[i] > max) {
+            max = s[i];
+            a = i;
+        }
+    }
+
+    // 最大的与最后一个数交换
+    s[a] = s[n - 1];
+    s[n - 1] = max;
+
+    int j;
+    int min = s[n - 1];
+    int b = n - 1;
+    for (j = 0; j < n; j++) {
+        if (s[j] < min) {
+            min = s[j];
+            b = j;
+        }
+    }
+
+    // 最小的与第一个数交换
+    s[b] = s[0];
+    s[0] = min;
+
+}
+
+void printf_s(int *s, int n) {
+    int i;
+    for (i = 0; i < n; i++)
+        printf("%d ", s[i]);
+    printf("\n");
+}
+
+int test_max_min_array() {
+    int *s;
+    int i, n;
+    printf("请输入要处理的数据个数:");
+    scanf("%d", &n);
+    // 动态分配内存
+    s = (int *) calloc(n, sizeof(int));
+
+    printf("请输入 %d 个整数:\n", n);
+
+    for (i = 0; i < n; i++) {
+        scanf("%d", &s[i]);
+    }
+
+    max_min_arr(s, n);
+    printf("交换后的数据顺序为:");
+    for (i = 0; i < n; i++)
+        printf("%d ", s[i]);
+
+    return 0;
+}
+
+// 提取字符串中的英文字母
+int *extract(char *str1) {
+    int len = strlen(str1);
+    char *str2;
+    str2 = (char *) calloc(len, sizeof(char));
+
+    int i = 0, j = 0;//定义两个整形变量并初始化为0
+    while (*(str1 + i) != '\0') { //当我们需要提取的字符串没有到达串结束符， 就可以提取，那么就会进入循环进行数字的提取
+        if ((*(str1 + i) >= 'A' && *(str1 + i) <= 'Z') || (*(str1 + i) >= 'a' && *(str1 + i) <= 'z')) {
+            *(str2 + j++) = *(str1 + i); //如果是一个数字字符，就将该字符保存到另外一个字符串str2中;注意j一定要自加，每进行一次，就应该指向下一个字符了
+        }
+        i++; //指向下一个位置
+    }
+    *(str2 + j) = '\0';//字符串的末尾需要加一个串结束符来表示字符串的结束
+    strcpy(str1, str2);
+    return 0;
+}
+
+// 判断回文字符串
+int isPalindrome(char *p) {
+    int len = strlen(p); //使用STRLEN函数取字符串数组的字符位数
+
+    for (int i = 0; i <= len; i++) {
+        if (p[i] == p[len - 1]) {
+            len--; //若首尾两个字符等值，分别向字符串中心移动一位，并判断
+        } else
+            return 0;
+    }
+    return 1;
+}
+
+int problem3() {
+    char str[50];
+    printf("请输入一个字符串（长度<50）：");
+    //字符串输入
+    int k = 0;
+    while (1) {
+        str[k] = getchar(); //从键盘读取字符
+        if (str[k] == '\n') { //如果输入回车赋值读取结束
+            break;
+        }
+        k++;
+    }
+    // 按照惯用法，默认填充 '\0'
+    str[k] = '\0';
+    extract(str);
+    if (isPalindrome(str))
+        printf("%s 是回文字符串\n", str);
+    else
+        printf("%s 不是回文字符串\n", str);
+    return 0;
+}
+
+
 // main 函数
 int main() {
-    sort_str_arr();
+//    printf("%d", isPalindrome("aBa"));
+
+    problem3();
+
+
+
+//    test_max_min_array();
+
+//    int n; //定义整型变量
+//    printf("请输入一个整数："); // 23456008
+//    scanf("%d", &n);
+//    printf("%d", n);
+//    sisyphus_number(n);
+
+//    pro1();
+//    pro2();
+//    pro3();
+//    pro4();
+//    pro5();
+//    pro6();
+//    int *p;
+//    int n = 10;
+//    p = (int *) calloc(n, sizeof(int));
+
+//    int a=3; printf("%d-%d\n", (a=a*5,a=a/4,a+1),a );
+
+//    int a=rand()%100, b=100+rand()%100;
+//    int max=(a==b)?0:1;
+//    printf("%d",max);
+
+
+
+
+//    char str1[] = "SpringSummerFallWinter", str2[] = "ll";
+//    printf("%s",strstr(str1,str2));
+//    int a[3][4] = { {1, 2}, {3, 4}, {5, 6, 7}};
+//    printf("%d", a[1][2]);
+//    int a, b, c, *d = &c;
+//    scanf("%d%d%d", &a, &b, d);
+//
+//    printf("%d %d %d", a, b, c);
+
+//    int a = 100;
+//    char b = 'A';
+//    short c = 22;
+//    double d = 0.6, e;
+//    e = a + b + c + d;
+//    int a[2][5];
+//    printf("%d ",sizeof (int));
+//    printf("%d",sizeof (a[0]));
+
+//    char *p;
+//    if (p==NULL){
+//
+//    }
+//
+//    if(p!=NULL){
+//
+//    }
+
+
+//    int k,a,b;
+//    unsigned long w= 5;
+//    double x=1.42;
+//
+//    int z=x%3;
+//    w += -2;
+//    k = (a=2,b=3,a+b) ;
+//    a+=(a-=((b=4) * (a=3)));
+//    char 2a = '\0';
+//    char _a[2] = {'1'};
+//    char a4[] = '123';
+//    char a3 = "\1";
+//    printf("%s",_a);
+
+//    char * pt1 = "1234", pt2[ ] = "12", * pt3 = "34";
+//    pt3 = pt1;
+//    pt2 = pt1;
+//    strcpy(pt2, pt3);
+//    printf("%s", pt2);
+//    char s[]="159", * p = s;
+//    printf("%c", *(p++));
+//    printf("%c", ++(*p));
+//    int k = 10;
+//    int count=0;
+//    while ( k = 0 ){
+//        k = k - 1;
+//        count++;
+//    }
+//    printf("%d\n", count);
+
+
+//    int x, y;
+//    int count=0;
+//    for (x = 0, y = 3; (y < 17) && (x < 7); x++, y += x){
+//        count++;
+//    }
+//    printf("%d\n", count);
+//    char s[12]={"abcdef"};
+//    printf("%d\n", strlen(s));
+//    int a, b;
+//    int c = (a = 5, b = 2, a > b ? a++ : b++, a + b);
+//    printf("%d", c);
+//    int a = 15;
+//    a += a -= a * a;
+//    printf("%d", a);
+
+//    int m = 5;
+//    if (m++ > 5)
+//        printf("%d\n", m);
+//    else
+//        printf("%d\n", m--);
+//    int a=1,b=2,c=3;
+//    if ( (a=c)&&(b=c)){
+//
+//    }
+//    printf("%d,%d,%d",a,b,c);
+
+//    float a = 0.1e0;
+//    int a=10,b=10,c=10;
+//    float f;
+//    scanf("%f", &f);
+//    printf("%f",f);
+
+//    sort_str_arr();
 
 // student_scores();
 //    test_upper_lower();
